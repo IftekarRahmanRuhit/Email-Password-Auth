@@ -1,8 +1,9 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { auth } from "../Firebase.init";
 import { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [success, setSuccess] = useState(false);
@@ -45,6 +46,13 @@ const Register = () => {
       .then((result) => {
         console.log(result.user);
         setSuccess(true);
+
+        // send email verification 
+        sendEmailVerification(auth.currentUser)
+        .then(()=>{
+        console.log('verification mail sent')
+        })
+
       })
       .catch((error) => {
         console.log(error.message);
@@ -98,8 +106,14 @@ const Register = () => {
             </div>
           </div>
           <div className="form-control mt-6">
-            <button className="btn btn-primary">Login</button>
+            <button className="btn btn-primary">Sign Up</button>
           </div>
+
+          <p className="text-center">Already have an account? <Link to='/login' className="text-blue-500 underline">Login</Link></p>
+
+
+
+
         </form>
         {errorMessage && (
           <p className="text-red-600 text-center mb-2 font-bold px-1">
